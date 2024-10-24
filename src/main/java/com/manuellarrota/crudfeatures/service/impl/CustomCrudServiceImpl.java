@@ -6,13 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class CustomCrudServiceImpl<T, DTO, ID extends Serializable, R extends CustomCrudRepository<T, ID>>
-        implements CustomCrudService<T, DTO, ID> {
+public class CustomCrudServiceImpl<T, DTO, R extends CustomCrudRepository<T>>
+        implements CustomCrudService<T, DTO> {
 
     protected final R repository;
     private final ModelMapper modelMapper;
@@ -29,12 +28,12 @@ public class CustomCrudServiceImpl<T, DTO, ID extends Serializable, R extends Cu
 
 
     @Override
-    public T create(T entity) {
+    public T save(T entity) {
         return repository.save(entity);
     }
 
     @Override
-    public T getById(ID id) {
+    public T getById(Long id) {
         return repository.getReferenceById(id);
     }
 
@@ -44,22 +43,22 @@ public class CustomCrudServiceImpl<T, DTO, ID extends Serializable, R extends Cu
     }
 
     @Override
-    public T update(ID id, T entity) {
+    public T update(Long id, T entity) {
         return repository.save(entity);
     }
 
     @Override
-    public void delete(ID id) {
+    public void delete(Long id) {
         repository.delete(getById(id));
     }
 
     @Override
-    public DTO createDto(T entity) {
-        return getDto(create(entity));
+    public DTO saveDto(DTO dto) {
+        return getDto(save(getInstance(dto)));
     }
 
     @Override
-    public DTO getByIdDto(ID id) {
+    public DTO getByIdDto(Long id) {
         return getDto(getById(id));
     }
 
@@ -70,7 +69,7 @@ public class CustomCrudServiceImpl<T, DTO, ID extends Serializable, R extends Cu
 
     @Override
     public DTO updateDto(DTO entityDto) {
-        return createDto(getInstance(entityDto));
+        return saveDto(entityDto);
     }
 
     @Override

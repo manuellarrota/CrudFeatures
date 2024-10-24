@@ -8,14 +8,14 @@ import java.util.List;
  * @param <DTO>
  * @param <ID>
  */
-public interface CustomCrudService<T, DTO, ID> {
-    T create(T entity);
-    T getById(ID id);
+public interface CustomCrudService<T, DTO> {
+    T save(T entity);
+    T getById(Long id);
     List<T> getAll();
-    T update(ID id, T entity);
-    void delete(ID id);
-    DTO createDto(T entity);
-    DTO getByIdDto(ID id);
+    T update(Long id, T entity);
+    void delete(Long id);
+    DTO saveDto(DTO dto);
+    DTO getByIdDto(Long id);
     List<DTO> getAllDto();
     DTO updateDto(DTO entityDto);
 
